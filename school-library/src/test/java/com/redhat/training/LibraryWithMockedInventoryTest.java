@@ -36,4 +36,18 @@ public class LibraryWithMockedInventoryTest {
         // Then
         verify(inventory).withdraw("book1");
     }
+    @Test
+    public void checkingOutDoesNotWithdrawFromInventoryWhenBookIsUnavailable()
+            throws BookNotAvailableException {
+        // Given
+        when(inventory.isBookAvailable("book1")).thenReturn(false);
+    
+        // When
+        try {
+            library.checkOut("student1", "book1");
+        } catch(BookNotAvailableException e) {}
+    
+        // Then
+        verify(inventory, times(0)).withdraw("book1");
+    }
 }
